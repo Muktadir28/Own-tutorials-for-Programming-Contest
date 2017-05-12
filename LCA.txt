@@ -1,0 +1,21 @@
+1. At first initialize the 0 element of the sparse table
+2. calculate for 2^1, 2^2, 2^3....
+		for (1 << i) <= N
+			for(int i=0; i<=N; i++)
+				p =  sparse_table[i-1][j];
+				if(p != -1) sparse_table[i][j] = sparse_table[i-1][p];
+3. Make the levels equal 
+		for(i=log2(N); i>=0; i--){
+			if(level[sparse[i][v]] >= level[u]){
+				v = sparse[i][v];
+			}
+		}
+4. do
+	for(i=log2(N); i>=0; i--){
+		if(sparse[i][v] != sparse[i][v]){
+			v = sparse[i][v];
+			u = sparse[i][u];
+		}
+	}
+5. if u and v are equal then return u or v 
+   else return par[u] or par[v];
