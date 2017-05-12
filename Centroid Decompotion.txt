@@ -1,0 +1,52 @@
+///--------------Centroid Decomposition part----------------///
+vector<long long>tree[200005];
+long long sub[200005], num_of_nod;
+bool in_centroid[200005];
+
+void centroid_dfs(long long u,long long p)
+{
+	sub[u]=1;
+	num_of_nod++;
+	for(int v=0; v<tree[u].size(); v++)
+		if(tree[u][v] != p && !in_centroid[tree[u][v]])
+		{
+			centroid_dfs(tree[u][v], u);
+			sub[u] += sub[tree[u][v]];
+			//cout << sub[u] << endl;
+		}
+}
+
+long long find_centroid(long long u, long long p){
+    for(int i=0; i<tree[u].size(); i++){
+        long long v = tree[u][i];
+        if(v != p && !in_centroid[v] && sub[v] > num_of_nod/2){
+            return find_centroid(v, u);
+        }
+    }
+
+    return u;
+}
+
+vector<long long>centroid_tree[200005];
+long long centroid_par[200005], root;
+
+void centroid_decomposition(long long u, long long p){
+    num_of_nod = 0;
+    centroid_dfs(u, u);
+    long long centroid = find_centroid(u, u);
+    if(p == -1){
+        p = centroid;
+        root = centroid;
+    }else{
+		centroid_tree[p].push_back(centroid);
+    }
+    //cout << centroid << endl;
+    in_centroid[centroid] = true;
+    centroid_par[centroid] = p;
+    for(int i=0; i<tree[centroid].size(); i++){
+        if(!in_centroid[tree[centroid][i]]){
+            centroid_decomposition(tree[centroid][i], centroid);
+        }
+    }
+}
+///-----------Centroid Decomposition part Ended-------------///
